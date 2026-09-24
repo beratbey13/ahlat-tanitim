@@ -1,0 +1,2100 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AHLAT | Tarihin Taşa İşlendiği Şehir</title>
+
+<style>
+
+/* =====================================================
+   TEMEL
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#050505;
+    color:white;
+    font-family:Arial, Helvetica, sans-serif;
+    overflow-x:hidden;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+
+/* =====================================================
+   SİNEMATİK GİRİŞ
+===================================================== */
+
+.intro{
+
+    position:fixed;
+    inset:0;
+
+    background:#020202;
+
+    z-index:99999;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    overflow:hidden;
+
+    transition:
+        opacity 1.5s,
+        visibility 1.5s;
+}
+
+.intro.hide{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+}
+
+.intro-light{
+
+    position:absolute;
+
+    width:900px;
+    height:900px;
+
+    top:-300px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    border-radius:50%;
+
+    background:
+    radial-gradient(
+        circle,
+        rgba(255,220,130,.55),
+        rgba(255,160,30,.15) 35%,
+        transparent 70%
+    );
+
+    opacity:0;
+
+    transition:2s;
+}
+
+.intro.on .intro-light{
+    opacity:1;
+}
+
+
+/* =====================================================
+   LAMBA
+===================================================== */
+
+.lamp{
+
+    position:absolute;
+
+    width:250px;
+    height:350px;
+
+    top:-20px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    transform-origin:top;
+
+    animation:swing 4s infinite ease-in-out;
+}
+
+@keyframes swing{
+
+    0%,100%{
+        transform:
+        translateX(-50%)
+        rotate(0);
+    }
+
+    50%{
+        transform:
+        translateX(-50%)
+        rotate(2deg);
+    }
+
+}
+
+.cable{
+
+    position:absolute;
+
+    width:4px;
+    height:150px;
+
+    top:0;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    background:#171717;
+}
+
+.shade{
+
+    position:absolute;
+
+    top:140px;
+    left:50%;
+
+    width:200px;
+    height:110px;
+
+    transform:translateX(-50%);
+
+    background:#151515;
+
+    clip-path:
+    polygon(
+        20% 0,
+        80% 0,
+        100% 100%,
+        0 100%
+    );
+}
+
+.bulb{
+
+    position:absolute;
+
+    top:200px;
+    left:50%;
+
+    width:50px;
+    height:65px;
+
+    transform:translateX(-50%);
+
+    border-radius:50%;
+
+    background:#111;
+
+    transition:.8s;
+}
+
+.intro.on .bulb{
+
+    background:#fff4a8;
+
+    box-shadow:
+        0 0 20px white,
+        0 0 50px #ffd35c,
+        0 0 110px #ff9d00;
+}
+
+.intro.on .shade{
+
+    background:#403923;
+
+    box-shadow:
+        0 0 50px rgba(255,190,50,.5);
+}
+
+
+/* =====================================================
+   INTRO YAZI
+===================================================== */
+
+.intro-content{
+
+    position:absolute;
+
+    top:58%;
+    left:50%;
+
+    transform:
+    translate(-50%,-40%);
+
+    text-align:center;
+
+    opacity:0;
+
+    transition:2s;
+
+    width:95%;
+}
+
+.intro.on .intro-content{
+
+    opacity:1;
+
+    transform:
+    translate(-50%,-50%);
+}
+
+.intro-content h1{
+
+    font-size:
+    clamp(55px,12vw,150px);
+
+    letter-spacing:
+    clamp(8px,3vw,30px);
+
+    text-shadow:
+    0 0 15px white,
+    0 0 50px #ffd45c,
+    0 0 100px #ff9d00;
+}
+
+.intro-content p{
+
+    margin:15px 0 35px;
+
+    color:#ccc;
+
+    letter-spacing:5px;
+
+    font-size:13px;
+}
+
+.start{
+
+    padding:16px 40px;
+
+    border:
+    1px solid rgba(255,255,255,.5);
+
+    border-radius:50px;
+
+    background:rgba(255,255,255,.04);
+
+    color:white;
+
+    cursor:pointer;
+
+    letter-spacing:4px;
+
+    transition:.4s;
+}
+
+.start:hover{
+
+    background:#ffd45c;
+
+    color:#111;
+
+    transform:scale(1.08);
+
+    box-shadow:
+    0 0 30px #ffd45c,
+    0 0 80px #ff9d00;
+}
+
+
+/* =====================================================
+   ANA SİTE
+===================================================== */
+
+.site{
+
+    opacity:0;
+
+    transition:2s;
+}
+
+.site.show{
+    opacity:1;
+}
+
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+nav{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+
+    padding:22px 6%;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    z-index:500;
+
+    background:
+    linear-gradient(
+        rgba(0,0,0,.7),
+        transparent
+    );
+
+    backdrop-filter:blur(4px);
+}
+
+.logo{
+
+    font-size:24px;
+
+    letter-spacing:5px;
+
+    font-weight:bold;
+}
+
+nav ul{
+
+    display:flex;
+
+    gap:28px;
+
+    list-style:none;
+}
+
+nav li{
+
+    font-size:12px;
+
+    letter-spacing:2px;
+
+    color:#ddd;
+
+    transition:.3s;
+}
+
+nav li:hover{
+    color:#e4c27a;
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero{
+
+    height:100vh;
+
+    min-height:650px;
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    overflow:hidden;
+}
+
+.hero-image{
+
+    position:absolute;
+
+    inset:0;
+
+    background-image:
+
+    linear-gradient(
+        rgba(0,0,0,.15),
+        rgba(0,0,0,.85)
+    ),
+
+    url("https://cdn1.ntv.com.tr/gorsel/vmEEqUVc-EmC6vEol5iY2g.jpg?mode=crop&scale=both&width=1200");
+
+    background-size:cover;
+
+    background-position:center;
+
+    transform:scale(1.05);
+
+    animation:
+    heroZoom 15s infinite alternate;
+}
+
+@keyframes heroZoom{
+
+    from{
+        transform:scale(1.05);
+    }
+
+    to{
+        transform:scale(1.15);
+    }
+
+}
+
+.hero-content{
+
+    position:relative;
+
+    z-index:10;
+
+    text-align:center;
+
+    margin-top:80px;
+}
+
+.hero-content small{
+
+    letter-spacing:8px;
+
+    color:#e0c27d;
+}
+
+.hero-content h1{
+
+    font-size:
+    clamp(70px,15vw,180px);
+
+    letter-spacing:
+    clamp(8px,4vw,40px);
+
+    text-shadow:
+    0 15px 50px black;
+}
+
+.hero-content p{
+
+    font-size:18px;
+
+    letter-spacing:6px;
+
+    color:#eee;
+}
+
+
+/* =====================================================
+   SCROLL İŞARETİ
+===================================================== */
+
+.scroll{
+
+    position:absolute;
+
+    bottom:30px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    z-index:20;
+
+    text-align:center;
+
+    color:#ddd;
+
+    font-size:11px;
+
+    letter-spacing:3px;
+}
+
+.scroll span{
+
+    display:block;
+
+    width:1px;
+
+    height:50px;
+
+    background:white;
+
+    margin:10px auto;
+
+    animation:
+    scrollLine 1.5s infinite;
+}
+
+@keyframes scrollLine{
+
+    0%{
+        opacity:0;
+        transform:scaleY(0);
+        transform-origin:top;
+    }
+
+    50%{
+        opacity:1;
+        transform:scaleY(1);
+    }
+
+    100%{
+        opacity:0;
+        transform:scaleY(0);
+        transform-origin:bottom;
+    }
+
+}
+
+
+/* =====================================================
+   GENEL
+===================================================== */
+
+section{
+    padding:110px 7%;
+}
+
+.title{
+
+    text-align:center;
+
+    margin-bottom:60px;
+}
+
+.title small{
+
+    color:#d1ae68;
+
+    letter-spacing:5px;
+}
+
+.title h2{
+
+    font-size:
+    clamp(35px,5vw,65px);
+
+    margin-top:12px;
+}
+
+
+/* =====================================================
+   AHLAT HAKKINDA
+===================================================== */
+
+.about{
+
+    background:#080807;
+}
+
+.about-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    gap:60px;
+
+    align-items:center;
+}
+
+.about-text{
+
+    color:#bbb;
+
+    line-height:2;
+
+    font-size:16px;
+}
+
+.about-text strong{
+    color:#e2c17b;
+}
+
+.about-photo{
+
+    height:500px;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 30px 80px rgba(0,0,0,.7);
+}
+
+.about-photo img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.8s;
+}
+
+.about-photo:hover img{
+    transform:scale(1.08);
+}
+
+
+/* =====================================================
+   FOTOĞRAF GALERİSİ
+===================================================== */
+
+.gallery{
+
+    background:#030303;
+}
+
+.gallery-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(12,1fr);
+
+    grid-auto-rows:230px;
+
+    gap:15px;
+}
+
+.gallery-item{
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:15px;
+
+    cursor:pointer;
+}
+
+.gallery-item:nth-child(1){
+    grid-column:span 7;
+    grid-row:span 2;
+}
+
+.gallery-item:nth-child(2){
+    grid-column:span 5;
+}
+
+.gallery-item:nth-child(3){
+    grid-column:span 5;
+}
+
+.gallery-item:nth-child(4){
+    grid-column:span 4;
+}
+
+.gallery-item:nth-child(5){
+    grid-column:span 4;
+}
+
+.gallery-item:nth-child(6){
+    grid-column:span 4;
+}
+
+.gallery-item img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    transition:
+    transform .8s,
+    filter .5s;
+}
+
+.gallery-item:hover img{
+
+    transform:scale(1.1);
+
+    filter:
+    brightness(.7);
+}
+
+.gallery-caption{
+
+    position:absolute;
+
+    left:0;
+    bottom:0;
+
+    width:100%;
+
+    padding:25px;
+
+    background:
+    linear-gradient(
+        transparent,
+        rgba(0,0,0,.85)
+    );
+
+    font-size:18px;
+
+    font-weight:bold;
+}
+
+
+/* =====================================================
+   GEZİLECEK YERLER
+===================================================== */
+
+.places{
+
+    background:#090807;
+}
+
+.place-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:25px;
+}
+
+.place{
+
+    min-height:430px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:18px;
+
+    background:#111;
+
+    border:
+    1px solid #24211b;
+}
+
+.place img{
+
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.8s;
+}
+
+.place:hover img{
+    transform:scale(1.1);
+}
+
+.place::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+    linear-gradient(
+        transparent 35%,
+        rgba(0,0,0,.9)
+    );
+}
+
+.place-info{
+
+    position:absolute;
+
+    bottom:0;
+
+    padding:30px;
+
+    z-index:2;
+}
+
+.place-info h3{
+
+    font-size:28px;
+
+    margin-bottom:10px;
+}
+
+.place-info p{
+
+    color:#bbb;
+
+    line-height:1.6;
+}
+
+
+/* =====================================================
+   TARİH KARTLARI
+===================================================== */
+
+.history{
+
+    background:#050505;
+}
+
+.history-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:20px;
+}
+
+.history-card{
+
+    padding:35px;
+
+    border:
+    1px solid #28241e;
+
+    border-radius:18px;
+
+    background:
+    linear-gradient(
+        145deg,
+        #14110d,
+        #080808
+    );
+
+    transition:.4s;
+}
+
+.history-card:hover{
+
+    transform:translateY(-8px);
+
+    border-color:#a8884e;
+}
+
+.history-card .number{
+
+    font-size:45px;
+
+    color:#c7a55e;
+
+    font-weight:bold;
+
+    margin-bottom:15px;
+}
+
+.history-card h3{
+
+    font-size:24px;
+
+    margin-bottom:12px;
+}
+
+.history-card p{
+
+    color:#999;
+
+    line-height:1.7;
+}
+
+
+/* =====================================================
+   KÜMBETLER
+===================================================== */
+
+.kumbet-section{
+
+    background:#0b0a08;
+}
+
+.kumbet-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    gap:25px;
+}
+
+.kumbet-box{
+
+    min-height:380px;
+
+    position:relative;
+
+    border-radius:18px;
+
+    overflow:hidden;
+}
+
+.kumbet-box img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.7s;
+}
+
+.kumbet-box:hover img{
+    transform:scale(1.08);
+}
+
+.kumbet-info{
+
+    position:absolute;
+
+    left:0;
+    bottom:0;
+
+    width:100%;
+
+    padding:30px;
+
+    background:
+    linear-gradient(
+        transparent,
+        rgba(0,0,0,.9)
+    );
+}
+
+.kumbet-info h3{
+    font-size:28px;
+}
+
+.kumbet-info p{
+
+    color:#bbb;
+
+    margin-top:8px;
+
+    line-height:1.6;
+}
+
+
+/* =====================================================
+   CTA
+===================================================== */
+
+.cta{
+
+    min-height:70vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+
+    linear-gradient(
+        rgba(0,0,0,.45),
+        rgba(0,0,0,.85)
+    ),
+
+    url("https://d.aydin24haber.com/other/tarihi-ve-dogal-guzellikleriyle-unlu-bitlisin-ahlat-ilcesinde-sonbaharda-seyrine-doyumsuz-manzaralar-olustu-IHA-20211111AW463738-5-t.jpg");
+
+    background-size:cover;
+
+    background-position:center;
+}
+
+.cta-content{
+
+    position:relative;
+
+    z-index:2;
+}
+
+.cta h2{
+
+    font-size:
+    clamp(45px,8vw,100px);
+
+    letter-spacing:8px;
+
+    margin-bottom:20px;
+}
+
+.cta p{
+
+    color:#ddd;
+
+    letter-spacing:4px;
+
+    margin-bottom:30px;
+}
+
+.cta-button{
+
+    padding:16px 40px;
+
+    border-radius:50px;
+
+    border:none;
+
+    background:#d6b36b;
+
+    color:#111;
+
+    font-weight:bold;
+
+    letter-spacing:3px;
+
+    cursor:pointer;
+
+    transition:.4s;
+}
+
+.cta-button:hover{
+
+    transform:scale(1.08);
+
+    box-shadow:
+    0 0 50px rgba(214,179,107,.5);
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer{
+
+    padding:40px;
+
+    background:#020202;
+
+    text-align:center;
+
+    color:#666;
+
+    font-size:12px;
+
+    letter-spacing:2px;
+}
+
+
+/* =====================================================
+   FOTOĞRAF MODAL
+===================================================== */
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+    rgba(0,0,0,.92);
+
+    z-index:999999;
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:30px;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal img{
+
+    max-width:95%;
+
+    max-height:90vh;
+
+    object-fit:contain;
+
+    border-radius:10px;
+
+    box-shadow:
+    0 0 100px black;
+}
+
+.close{
+
+    position:absolute;
+
+    top:25px;
+    right:35px;
+
+    font-size:45px;
+
+    cursor:pointer;
+
+    color:white;
+}
+
+
+/* =====================================================
+   SCROLL ANIMATION
+===================================================== */
+
+.reveal{
+
+    opacity:0;
+
+    transform:
+    translateY(50px);
+
+    transition:
+    1s ease;
+}
+
+.reveal.visible{
+
+    opacity:1;
+
+    transform:
+    translateY(0);
+}
+
+
+/* =====================================================
+   MOBİL
+===================================================== */
+
+@media(max-width:900px){
+
+    nav ul{
+        display:none;
+    }
+
+    .about-grid{
+        grid-template-columns:1fr;
+    }
+
+    .place-grid{
+        grid-template-columns:1fr;
+    }
+
+    .history-grid{
+        grid-template-columns:1fr;
+    }
+
+    .kumbet-grid{
+        grid-template-columns:1fr;
+    }
+
+    .gallery-grid{
+
+        display:grid;
+
+        grid-template-columns:1fr 1fr;
+
+        grid-auto-rows:200px;
+    }
+
+    .gallery-item{
+        grid-column:span 1 !important;
+        grid-row:span 1 !important;
+    }
+
+}
+
+@media(max-width:500px){
+
+    section{
+        padding:80px 5%;
+    }
+
+    .gallery-grid{
+        grid-template-columns:1fr;
+    }
+
+    .gallery-item{
+        height:250px;
+    }
+
+    .intro-content p{
+        font-size:10px;
+        letter-spacing:2px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SİNEMATİK GİRİŞ
+===================================================== -->
+
+<div class="intro" id="intro">
+
+    <div class="intro-light"></div>
+
+    <div class="lamp">
+
+        <div class="cable"></div>
+
+        <div class="shade"></div>
+
+        <div class="bulb"></div>
+
+    </div>
+
+
+    <div class="intro-content">
+
+        <h1>AHLAT</h1>
+
+        <p>
+            TARİHİN TAŞA İŞLENDİĞİ ŞEHİR
+        </p>
+
+        <button
+            class="start"
+            onclick="enterSite()">
+
+            AHLAT'I KEŞFET →
+
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     ANA SİTE
+===================================================== -->
+
+<div class="site" id="site">
+
+
+<!-- NAV -->
+
+<nav>
+
+    <div class="logo">
+        AHLAT
+    </div>
+
+    <ul>
+
+        <li>
+            <a href="#about">
+                AHLAT
+            </a>
+        </li>
+
+        <li>
+            <a href="#gallery">
+                GALERİ
+            </a>
+        </li>
+
+        <li>
+            <a href="#places">
+                GEZİLECEK YERLER
+            </a>
+        </li>
+
+        <li>
+            <a href="#history">
+                TARİH
+            </a>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<header class="hero">
+
+    <div class="hero-image"></div>
+
+    <div class="hero-content">
+
+        <small>
+            BİTLİS • TÜRKİYE
+        </small>
+
+        <h1>
+            AHLAT
+        </h1>
+
+        <p>
+            VAN GÖLÜ'NÜN KIYISINDA BİR TARİH
+        </p>
+
+    </div>
+
+
+    <div class="scroll">
+
+        AŞAĞI KAYDIR
+
+        <span></span>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     AHLAT HAKKINDA
+===================================================== -->
+
+<section
+class="about"
+id="about">
+
+    <div class="title reveal">
+
+        <small>
+            AHLAT
+        </small>
+
+        <h2>
+            Taşların Anlattığı Hikâye
+        </h2>
+
+    </div>
+
+
+    <div class="about-grid">
+
+
+        <div class="about-text reveal">
+
+            <p>
+
+                Ahlat, Bitlis'in Van Gölü kıyısındaki
+                tarihî ilçelerinden biridir.
+
+                <br><br>
+
+                İlçe özellikle Selçuklu döneminden
+                kalan anıtsal mezar taşları,
+                kümbetleri ve taş işçiliğiyle
+                tanınır.
+
+                <br><br>
+
+                <strong>
+                Selçuklu Meydan Mezarlığı
+                </strong>
+                Ahlat'ın en önemli tarihî
+                alanlarından biridir.
+
+                <br><br>
+
+                Ahlat'ın tarihî dokusu ile Van
+                Gölü'nün doğal manzarası aynı
+                coğrafyada buluşur.
+
+            </p>
+
+        </div>
+
+
+        <div class="about-photo reveal">
+
+            <img
+            src="https://cdn1.ntv.com.tr/gorsel/vmEEqUVc-EmC6vEol5iY2g.jpg?mode=crop&scale=both&width=1200"
+            alt="Ahlat Selçuklu Mezarlığı">
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     GERÇEK FOTOĞRAF GALERİSİ
+===================================================== -->
+
+<section
+class="gallery"
+id="gallery">
+
+    <div class="title reveal">
+
+        <small>
+            GERÇEK GÖRÜNTÜLER
+        </small>
+
+        <h2>
+            Ahlat'tan Kareler
+        </h2>
+
+    </div>
+
+
+    <div class="gallery-grid">
+
+
+        <div
+        class="gallery-item reveal"
+        onclick="openImage(this)">
+
+            <img
+            src="https://cdn1.ntv.com.tr/gorsel/vmEEqUVc-EmC6vEol5iY2g.jpg?mode=crop&scale=both&width=1200"
+            alt="Selçuklu Mezarlığı">
+
+            <div class="gallery-caption">
+                Selçuklu Mezarlığı
+            </div>
+
+        </div>
+
+
+        <div
+        class="gallery-item reveal"
+        onclick="openImage(this)">
+
+            <img
+            src="https://www.vahatuder.org.tr/u/ahlattttttttt-1NSNSSQ_1460.jpg"
+            alt="Ahlat mezar taşları">
+
+            <div class="gallery-caption">
+                Taşa İşlenen Sanat
+            </div>
+
+        </div>
+
+
+        <div
+        class="gallery-item reveal"
+        onclick="openImage(this)">
+
+            <img
+            src="https://www.dusuncemektebi.com/resimler/images/resized_2024e-2d944131exzjdvx8l7vnagpuoql9p1ae4rq4sajq4p4hivnd.jpeg"
+            alt="Ahlat tarihî mezar taşları">
+
+            <div class="gallery-caption">
+                Selçuklu Taş İşçiliği
+            </div>
+
+        </div>
+
+
+        <div
+        class="gallery-item reveal"
+        onclick="openImage(this)">
+
+            <img
+            src="https://d.aydin24haber.com/other/tarihi-ve-dogal-guzellikleriyle-unlu-bitlisin-ahlat-ilcesinde-sonbaharda-seyrine-doyumsuz-manzaralar-olustu-IHA-20211111AW463738-5-t.jpg"
+            alt="Ahlat sonbahar">
+
+            <div class="gallery-caption">
+                Ahlat'ta Sonbahar
+            </div>
+
+        </div>
+
+
+        <div
+        class="gallery-item reveal"
+        onclick="openImage(this)">
+
+            <img
+            src="https://img0.oastatic.com/img2/614531766/max/variant.jpg"
+            alt="Ahlat Selçuklu Mezarlığı">
+
+            <div class="gallery-caption">
+                Tarihin İzleri
+            </div>
+
+        </div>
+
+
+        <div
+        class="gallery-item reveal"
+        onclick="openImage(this)">
+
+            <img
+            src="https://www.vahatuder.org.tr/u/ahlattttttttt-1NSNSSQ_1460.jpg"
+            alt="Ahlat">
+
+            <div class="gallery-caption">
+                Ahlat'ın Taşları
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     GEZİLECEK YERLER
+===================================================== -->
+
+<section
+class="places"
+id="places">
+
+    <div class="title reveal">
+
+        <small>
+            KEŞFET
+        </small>
+
+        <h2>
+            Ahlat'ta Görülecek Yerler
+        </h2>
+
+    </div>
+
+
+    <div class="place-grid">
+
+
+        <div class="place reveal">
+
+            <img
+            src="https://www.vahatuder.org.tr/u/ahlattttttttt-1NSNSSQ_1460.jpg"
+            alt="Selçuklu Mezarlığı">
+
+            <div class="place-info">
+
+                <h3>
+                    Selçuklu Meydan Mezarlığı
+                </h3>
+
+                <p>
+                    Anıtsal mezar taşlarıyla
+                    Ahlat'ın en önemli tarihî
+                    alanlarından biridir.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="place reveal">
+
+            <img
+            src="https://www.dusuncemektebi.com/resimler/images/resized_2024e-2d944131exzjdvx8l7vnagpuoql9p1ae4rq4sajq4p4hivnd.jpeg"
+            alt="Ahlat kümbetleri">
+
+            <div class="place-info">
+
+                <h3>
+                    Kümbetler
+                </h3>
+
+                <p>
+                    Ahlat'ın tarihî mimarisinin
+                    en dikkat çekici örnekleri
+                    arasında yer alır.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="place reveal">
+
+            <img
+            src="https://cdn1.ntv.com.tr/gorsel/vmEEqUVc-EmC6vEol5iY2g.jpg?mode=crop&scale=both&width=1200"
+            alt="Ahlat">
+
+            <div class="place-info">
+
+                <h3>
+                    Van Gölü Manzarası
+                </h3>
+
+                <p>
+                    Ahlat'ın doğal güzellikleri
+                    tarihî dokusuyla birlikte
+                    eşsiz bir atmosfer oluşturur.
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     TARİH
+===================================================== -->
+
+<section
+class="history"
+id="history">
+
+    <div class="title reveal">
+
+        <small>
+            TARİH
+        </small>
+
+        <h2>
+            Ahlat'ın Mirası
+        </h2>
+
+    </div>
+
+
+    <div class="history-grid">
+
+
+        <div class="history-card reveal">
+
+            <div class="number">
+                01
+            </div>
+
+            <h3>
+                Selçuklu Mezarlığı
+            </h3>
+
+            <p>
+                Anıtsal mezar taşları,
+                kitabeler ve taş işçiliği
+                Ahlat'ın tarihî kimliğinin
+                önemli parçalarıdır.
+            </p>
+
+        </div>
+
+
+        <div class="history-card reveal">
+
+            <div class="number">
+                02
+            </div>
+
+            <h3>
+                Kümbetler
+            </h3>
+
+            <p>
+                Çifte Kümbetler, Ulu Kümbet,
+                Erzen Hatun Kümbeti ve
+                Emir Bayındır Kümbeti
+                Ahlat'ın dikkat çeken
+                tarihî yapıları arasındadır.
+            </p>
+
+        </div>
+
+
+        <div class="history-card reveal">
+
+            <div class="number">
+                03
+            </div>
+
+            <h3>
+                Taş İşçiliği
+            </h3>
+
+            <p>
+                Mezar taşlarındaki geometrik,
+                bitkisel ve yazılı süslemeler
+                Ahlat taş işçiliğinin
+                karakteristik özelliklerini
+                gösterir.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     KÜMBETLER
+===================================================== -->
+
+<section class="kumbet-section">
+
+    <div class="title reveal">
+
+        <small>
+            MİMARİ
+        </small>
+
+        <h2>
+            Ahlat Kümbetleri
+        </h2>
+
+    </div>
+
+
+    <div class="kumbet-grid">
+
+
+        <div class="kumbet-box reveal">
+
+            <img
+            src="https://www.dusuncemektebi.com/resimler/images/resized_2024e-2d944131exzjdvx8l7vnagpuoql9p1ae4rq4sajq4p4hivnd.jpeg"
+            alt="Ahlat kümbetleri">
+
+            <div class="kumbet-info">
+
+                <h3>
+                    Taşa İşlenen Mimari
+                </h3>
+
+                <p>
+                    Ahlat kümbetleri,
+                    Anadolu'daki tarihî
+                    taş mimarisinin dikkat
+                    çekici örneklerindendir.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="kumbet-box reveal">
+
+            <img
+            src="https://d.aydin24haber.com/other/tarihi-ve-dogal-guzellikleriyle-unlu-bitlisin-ahlat-ilcesinde-sonbaharda-seyrine-doyumsuz-manzaralar-olustu-IHA-20211111AW463738-5-t.jpg"
+            alt="Ahlat tarihî alan">
+
+            <div class="kumbet-info">
+
+                <h3>
+                    Tarih ve Doğa
+                </h3>
+
+                <p>
+                    Tarihî yapılar ile Ahlat'ın
+                    doğal çevresi aynı manzarada
+                    buluşuyor.
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CTA
+===================================================== -->
+
+<section class="cta">
+
+    <div class="cta-content reveal">
+
+        <h2>
+            AHLAT'I KEŞFET
+        </h2>
+
+        <p>
+            TARİHİN İZLERİNİ TAKİP ET.
+        </p>
+
+        <button
+        class="cta-button"
+        onclick="window.scrollTo({
+            top:0,
+            behavior:'smooth'
+        })">
+
+            BAŞA DÖN ↑
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    © 2026 AHLAT
+    <br><br>
+    TARİHİN TAŞA İŞLENDİĞİ ŞEHİR
+
+</footer>
+
+</div>
+
+
+<!-- =====================================================
+     FOTOĞRAF MODAL
+===================================================== -->
+
+<div
+class="modal"
+id="modal"
+onclick="closeImage()">
+
+    <div
+    class="close">
+        ×
+    </div>
+
+    <img
+    id="modalImage"
+    src=""
+    alt="Ahlat">
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   GİRİŞ
+===================================================== */
+
+const intro =
+document.getElementById("intro");
+
+const site =
+document.getElementById("site");
+
+setTimeout(()=>{
+
+    intro.classList.add("on");
+
+},700);
+
+
+function enterSite(){
+
+    intro.classList.remove("on");
+
+    intro.style.opacity="0";
+
+    setTimeout(()=>{
+
+        intro.classList.add("hide");
+
+        site.classList.add("show");
+
+        window.scrollTo(0,0);
+
+    },1200);
+
+}
+
+
+/* =====================================================
+   SCROLL ANİMASYONU
+===================================================== */
+
+const elements =
+document.querySelectorAll(".reveal");
+
+function reveal(){
+
+    elements.forEach(el=>{
+
+        const position =
+        el.getBoundingClientRect().top;
+
+        if(
+        position <
+        window.innerHeight - 80
+        ){
+
+            el.classList.add("visible");
+
+        }
+
+    });
+
+}
+
+window.addEventListener(
+"scroll",
+reveal
+);
+
+reveal();
+
+
+/* =====================================================
+   FOTOĞRAF BÜYÜTME
+===================================================== */
+
+const modal =
+document.getElementById("modal");
+
+const modalImage =
+document.getElementById("modalImage");
+
+
+function openImage(element){
+
+    const image =
+    element.querySelector("img");
+
+    modalImage.src =
+    image.src;
+
+    modal.classList.add("show");
+
+}
+
+
+function closeImage(){
+
+    modal.classList.remove("show");
+
+}
+
+
+/* ESC İLE KAPAT */
+
+document.addEventListener(
+"keydown",
+function(e){
+
+    if(e.key==="Escape"){
+
+        closeImage();
+
+    }
+
+});
+
+
+/* =====================================================
+   MOUSE PARALLAX HERO
+===================================================== */
+
+document.addEventListener(
+"mousemove",
+function(e){
+
+    const heroImage =
+    document.querySelector(".hero-image");
+
+    const x =
+    (e.clientX /
+    window.innerWidth - .5);
+
+    const y =
+    (e.clientY /
+    window.innerHeight - .5);
+
+    heroImage.style.transform =
+    `
+    scale(1.08)
+    translate(
+        ${x*8}px,
+        ${y*8}px
+    )
+    `;
+
+});
+
+</script>
+
+</body>
+
+</html>
+<footer class="site-footer">
+  <div class="footer-line"></div>
+
+  <p class="footer-title">AHLAT</p>
+
+  <p>
+    © 2026 Ahlat Tanıtım • Tüm hakları saklıdır.
+  </p>
+
+  <p class="developer">
+    Bu web sitesi <strong>Berat Aksüt</strong> tarafından yapılmıştır.
+  </p>
+
+  <p class="footer-small">
+    Tarih • Kültür • Doğa • Ahlat
+  </p>
+</footer>
+
+<style>
+.site-footer {
+  text-align: center;
+  padding: 55px 20px 35px;
+  background: #050505;
+  color: #aaa;
+  font-family: Arial, sans-serif;
+}
+
+.footer-line {
+  width: 70px;
+  height: 2px;
+  background: #c9a227;
+  margin: 0 auto 25px;
+}
+
+.footer-title {
+  font-size: 28px;
+  letter-spacing: 8px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.site-footer p {
+  margin: 10px 0;
+}
+
+.developer {
+  color: #ddd;
+}
+
+.developer strong {
+  color: #c9a227;
+}
+
+.footer-small {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: #666;
+  margin-top: 20px !important;
+}
+</style>
